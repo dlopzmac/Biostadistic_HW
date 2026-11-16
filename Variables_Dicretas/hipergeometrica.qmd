@@ -1,0 +1,68 @@
+---
+title: "Distribución Hipergeométrica"
+lang: es
+format: html
+---
+
+```{=html}
+<style>
+main.content {
+text-align: justify}
+</style>
+```
+
+
+Desarrollar como en la demás distribuciones, incluyendo la función de probabilidad, gráficas considerando el cambio en los parámetros de la distribución. Características de la distribución (media y varianza). Un ejemplo con valores simulados y la verificación del teorema central del límite. Tomar como referencia principal el libro Introducción a la Probabilidad de Luis Rincón, páginas 243-247.
+
+
+### 1. Función de probabilidad.
+* **Función de probabilidad:** P(X=x) = [C(K, x) * C(N - K, n - x)] / C(N, n)
+
+
+### 2. Gráficas considerando los parámetros.
+```{r}
+x = 0:10
+par(mfrow = c(1, 2))
+
+# Caso 1: K=25
+barplot(dhyper(x, 25, 25, 10), names.arg = x, col = "skyblue", main = "K=25", xlab = "Éxitos")
+
+# Caso 2: K40
+barplot(dhyper(x, 40, 10, 10), names.arg = x, col = "orange", main = "K=40", xlab = "Éxitos")
+```
+
+### 3. Características de la distribución: Media y varianza.
+
+* **Media:** E(X) = n * (K / N)
+* **Varianza:** Var(X) = n * (K / N) * ((N - K) / N) * ((N - n) / (N - 1))
+
+
+### 4. Ejemplo.
+```{r}
+N=40; K=12; n=8
+
+# fórmulas 
+mediaf=n*(K/N)
+varf=n*(K/N)*((N-K)/N)*((N-n)/(N-1))
+
+mediaf
+varf
+
+# 1000 repeticiones
+set.seed(123)
+simulacion=rhyper(1000, K, N-K, n)
+
+m=mean(simulacion)
+v=var(simulacion)
+m
+v
+```
+
+### 5. Verificación del Teorema Central del Límite.
+```{r}
+
+set.seed(123)
+promedios = replicate(1000, mean(rhyper(50, K, N - K, n)))
+
+hist(promedios, col = "lightgreen", main = "Teorema Central del Límite")
+```
